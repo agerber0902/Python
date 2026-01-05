@@ -11,7 +11,21 @@ Web Scraper that uses requests to and the input url to get html and return it
 #   Define Imports
 import requests
 from utils import doesExist, isValidType
+from bs4 import BeautifulSoup
 #-- Imports
+
+#   Get the html soup from the url
+def getHtmlSoupFromUrl(url):
+    html = getPlayerHtmlFromUrl(url);
+    
+    #   If html does not exist, return None
+    if not doesExist(html):
+        print("No HTML was returned by the response.")
+        return None
+    
+    #   Get the html soup
+    print("Soup was created")
+    return BeautifulSoup(html, features="html.parser")
 
 #   Get the html page from the url
 def getPlayerHtmlFromUrl(player_url):
