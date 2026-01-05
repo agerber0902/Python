@@ -16,9 +16,6 @@ from htmlScraper import getPlayerHtmlFromUrl
 from utils import doesExist
 #-- Imports
 
-player_url = "https://www.pro-football-reference.com/players/J/JeanAs00.htm"
-
-
 #   Use beautiful soup to get the the player game log
 def getGameLogFromSoup(html_soup):
     print(f"Gathering Game Log from soup")
@@ -92,17 +89,3 @@ def games_from_log(game_log_rows, player_name):
     
     print(f"Found {len(games)} games for {player_name}")
     return games, player_name
-
-#   Get the html soup from the url
-def getHtmlSoupFromUrl(url):
-    html = getPlayerHtmlFromUrl(url);
-    
-    #   If html does not exist, return None
-    if not doesExist(html):
-        print("No HTML was returned by the response.")
-        return None
-    
-    #   Get the html soup
-    return BeautifulSoup(html, features="html.parser")
-    
-    
