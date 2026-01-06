@@ -15,5 +15,6 @@ from playerScraper import getPlayerDataFromSoup
 player_url = "https://www.pro-football-reference.com/players/J/JeanAs00.htm"
 html_soup = getHtmlSoupFromUrl(player_url)
 
-# Get the player info
-player_info = getPlayerDataFromSoup(html_soup)
+#   Get the player info
+player = getPlayerDataFromSoup(html_soup)
+#   Get the players max values

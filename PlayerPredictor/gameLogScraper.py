@@ -11,14 +11,13 @@ Get the 2025 Game Log Table and parse data
 """
 
 #   Define Imports
-from bs4 import BeautifulSoup
-from htmlScraper import getPlayerHtmlFromUrl
 from utils import doesExist
+from classes.gameLog import GameLog
 #-- Imports
 
 #   Use beautiful soup to get the the player game log
 def getGameLogFromSoup(html_soup):
-    print(f"Gathering Game Log from soup")
+    print("Gathering Game Log from soup")
     
     game_log = []
     
@@ -88,4 +87,5 @@ def games_from_log(game_log_rows, player_name):
         games.append(row_data)
     
     print(f"Found {len(games)} games for {player_name}")
-    return games, player_name
+    game_log = GameLog(games = games)
+    return game_log
