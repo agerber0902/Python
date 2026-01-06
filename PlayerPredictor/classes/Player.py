@@ -7,16 +7,10 @@ Main Player Class object. Inherits from PlayerInfo
 
 @author: andrewgerber
 """
-import PlayerInfo as PI
-class Player(PI.PlayerInfo):
+from .playerInfo import PlayerInfo
+class Player(PlayerInfo):
     
-    def __init__(self, playerInfo = None, gameLog = None):
+    def __init__(self, player_info = None, game_log = None):
         #Initialize Player Info
-        self.PlayerInfo = playerInfo
-        self.GameLog = gameLog
-    
-    #Set Player Info after creation
-    def setPlayerInfo(self, playerInfo):
-        self.PlayerInfo = playerInfo
-    
-    
+        self.PlayerInfo = player_info
+        self.GameLog = game_log
