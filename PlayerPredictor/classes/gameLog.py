@@ -14,8 +14,8 @@ from .game import Game
 from utils import isValidType
 from typing import List, Dict
 
-MAX_RUSHING_STAT_NAMES = ["rush_att", "rush_yds", "rush_td", "rush_long", "rush_yrds_per_attempt"]
-MAX_RECEIVING_STAT_NAMES = ["targets", "rec", "rec_yds", "rec_yds_per_rec", "rec_td", "rec_long", "rec_yrds_per_tgt"]
+MAX_RUSHING_STAT_NAMES = ["rush_att", "rush_yds", "rush_td", "rush_long"]
+MAX_RECEIVING_STAT_NAMES = ["targets", "rec", "rec_yds", "rec_yds_per_rec", "rec_td", "rec_long"]
 MAX_STAT_NAMES = ["yds_per_touch", "yds_from_scrimage", "rush_receive_td", "fumbles"]
 
 TOTAL_RUSHING_STAT_NAMES = ["rush_att", "rush_yds", "rush_td"]
@@ -26,47 +26,91 @@ class GameLog:
     games: list[Game] = field(default_factory=list)
     rushingTotals: Dict[str, int] = field(default_factory=dict)
     receivingTotals: Dict[str, int] = field(default_factory=dict)    
+    rushingMaxes: List[Dict[str, object]] = field(default_factory=list)
+    receivingMaxes: List[Dict[str, object]] = field(default_factory=list)
     
     def __post_init__(self):
-        # Compute totals for all rush stats
+        
+        #   Set Totals
+        self.set_rush_totals()
+        self.set_rec_totals()
+        
+        #   Set Max values
+        self.set_rush_maxes()
+        self.set_rec_maxes()          
+        
+
+    #   Compute maxes for all rush stats
+    def set_rush_maxes(self):
+        for stat_name in MAX_RUSHING_STAT_NAMES:
+            max_games = self.stat_max(stat_name)
+    
+            if not max_games:
+                continue
+    
+            max_value = getattr(max_games[0], stat_name, 0) or 0
+            game_dates = [g.date for g in max_games]  # or g.date, or index
+    
+            self.rushingMaxes.append({
+                stat_name: max_value,
+                "game_dates": game_dates
+            })
+
+    #   Compute maxes for all rec stats
+    def set_rec_maxes(self):
+        for stat_name in MAX_RECEIVING_STAT_NAMES:
+            max_games = self.stat_max(stat_name)
+    
+            if not max_games:
+                continue
+    
+            max_value = getattr(max_games[0], stat_name, 0) or 0
+            game_dates = [g.date for g in max_games]  # or g.date, or index
+    
+            self.receivingMaxes.append({
+                stat_name: max_value,
+                "game_dates": game_dates
+            })
+
+    #   Compute totals for all rush stats
+    def set_rush_totals(self):
         for stat_name in TOTAL_RUSHING_STAT_NAMES:
             self.rushingTotals[stat_name] = sum(
                 int(getattr(g, stat_name, 0) or 0)
                 for g in self.games
             )
-        
-        # Compute totals for all rec stats
+    
+    #   Compute totals for all rec stats
+    def set_rec_totals(self):
         for stat_name in TOTAL_RECEIVING_STAT_NAMES:
             self.receivingTotals[stat_name] = sum(
                 int(getattr(g, stat_name, 0) or 0)
                 for g in self.games
             )
-                    
+                        
     #   Retun the game from games input with the max value for stat_name input
     def stat_max(self, stat_name: str) -> list[Game]:
-        try:
-            if not isValidType(stat_name, str):
-                raise TypeError("Stat Name is not valid.")
-            
-            #   Get the max value
-            max_value = max(
-                self.games,
-                key=lambda game: getattr(game, stat_name, 0) or 0,
-                default=None
-            )
-            
-            # Return all games that match the max, ordered by date
-            return sorted(
-                (
-                    game for game in self.games
-                    if (getattr(game, stat_name, 0) or 0) == max_value
-                ),
-                key=lambda game: game.date
-            )
-            
-        except:
-            print(f"An error occured getting stat max for {stat_name}")
-            return None
+        if not isValidType(stat_name, str):
+            raise TypeError("Stat Name is not valid.")
+    
+        if not self.games:
+            return []
+    
+        #   Find Max Value
+        max_value = max(
+            int(getattr(game, stat_name, 0) or 0)
+            for game in self.games
+        )
+    
+        #   Return all games that match, ordered by date
+        return sorted(
+            [
+                game for game in self.games
+                if int(getattr(game, stat_name, 0) or 0) == max_value
+            ],
+            key=lambda game: game.date
+        )
+
 
     #   Game Log Totals
     def stat_total(self, stat_name: str) -> int:
@@ -77,4 +121,17 @@ class GameLog:
         return sum(
             getattr(g, stat_name, 0) or 0
             for g in self.games
+        )
+
+    def find_game_by_date(self, date):
+        return next(
+            (g for g in self.games if g.date == date),
+            None
+            )
+
+
+    def get_max_entry(self, max_list, stat_name):
+        return next(
+            (entry for entry in max_list if stat_name in entry),
+            None
         )
