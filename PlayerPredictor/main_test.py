@@ -17,4 +17,3 @@ html_soup = getHtmlSoupFromUrl(player_url)
 
 #   Get the player info
 player = getPlayerDataFromSoup(html_soup)
-#   Get the players max values

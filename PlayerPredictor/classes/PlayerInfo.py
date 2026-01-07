@@ -20,24 +20,24 @@ class PlayerInfo:
 
     #   Functions to determine position
     @property
-    def isQB(self):
+    def isQB(self) -> bool:
         return self.position.upper() == "QB"
     @property
-    def isRB(self):
+    def isRB(self) -> bool:
         return self.position.upper() == "RB"
     @property
-    def isWR(self):
+    def isWR(self) -> bool:
         return self.position.upper() == "WR"
     @property
-    def isTE(self):
+    def isTE(self) -> bool:
         return self.position.upper() == "TE"
     @property
-    def isSkill(self):
+    def isSkill(self) -> bool:
         return self.isRB(self) or self.isWR(self) or self.isTE()
     @property
-    def isKicker(self):
+    def isKicker(self) -> bool:
         return self.position.upper() == "K"
     @property
-    def isPunter(self):
+    def isPunter(self) -> bool:
         return self.position.upper() == "P"
     # TODO: how to handle DEF?

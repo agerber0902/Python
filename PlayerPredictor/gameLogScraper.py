@@ -12,7 +12,9 @@ Get the 2025 Game Log Table and parse data
 
 #   Define Imports
 from utils import doesExist
+import datetime
 from classes.gameLog import GameLog
+from classes.game import Game
 #-- Imports
 
 #   Use beautiful soup to get the the player game log
@@ -53,9 +55,6 @@ def getGameLogFromSoup(html_soup):
 
     
     return games_from_log(game_log_rows, player_name)
-    
-    return game_log
-    print("Gathering finished");
 
 #   Return all the games from the game log table
 def games_from_log(game_log_rows, player_name):
@@ -84,8 +83,40 @@ def games_from_log(game_log_rows, player_name):
 
             row_data[stat] = value
 
-        games.append(row_data)
+        games.append(game_from_dict(row_data))
     
     print(f"Found {len(games)} games for {player_name}")
     game_log = GameLog(games = games)
     return game_log
+
+#   Convert dict to Game object
+def game_from_dict(data: dict) -> Game:
+    
+    return Game(
+        date=datetime.datetime.strptime(data["date"], "%Y-%m-%d").date(),
+        team_name_abbr=data.get("team_name_abbr", ""),
+        game_location=data.get("game_location", ""),
+        opp_name_abbr=data.get("opp_name_abbr", ""),
+        game_result=data.get("game_result", ""),
+
+        rush_att=int(data.get("rush_att", 0) or 0),
+        rush_yds=int(data.get("rush_yds", 0) or 0),
+        rush_td=int(data.get("rush_td", 0) or 0),
+        rush_long=int(data.get("rush_long", 0) or 0),
+        rush_yds_per_att=float(data.get("rush_yds_per_att", 0) or 0),
+
+        targets=int(data.get("targets", 0) or 0),
+        rec=int(data.get("rec", 0) or 0),
+        rec_yds=int(data.get("rec_yds", 0) or 0),
+        rec_yds_per_rec=float(data.get("rec_yds_per_rec", 0) or 0),
+        rec_td=int(data.get("rec_td", 0) or 0),
+        rec_long=int(data.get("rec_long", 0) or 0),
+        catch_pct=float(str(data.get("catch_pct", "0") or "0").replace("%", "")),
+        rec_yds_per_tgt=float(data.get("rec_yds_per_tgt", 0) or 0),
+
+        touches=int(data.get("touches", 0) or 0),
+        yds_per_touch=float(data.get("yds_per_touch", 0) or 0),
+        yds_from_scrimmage=int(data.get("yds_from_scrimmage", 0) or 0),
+        rush_receive_td=int(data.get("rush_receive_td", 0) or 0),
+        fumbles=int(data.get("fumbles", 0) or 0),
+    )
