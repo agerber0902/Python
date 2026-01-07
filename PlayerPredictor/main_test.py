@@ -12,9 +12,12 @@ Test main file for testing and sandbox purposes
 from htmlScraper import getHtmlSoupFromUrl
 from playerScraper import getPlayerDataFromSoup
 
-player_url = "https://www.pro-football-reference.com/players/J/JeanAs00.htm"
+player_url = input("Enter player url: ")
+#"https://www.pro-football-reference.com/players/J/JeanAs00.htm"
 html_soup = getHtmlSoupFromUrl(player_url)
 
 #   Get the player info
 player = getPlayerDataFromSoup(html_soup)
-#   Get the players max values
+
+#   Display the info
+print(player.display())
