@@ -99,6 +99,15 @@ def game_from_dict(data: dict) -> Game:
         opp_name_abbr=data.get("opp_name_abbr", ""),
         game_result=data.get("game_result", ""),
 
+        pass_cmp = int(data.get("pass_cmp", 0) or 0),
+        pass_att = int(data.get("pass_att", 0) or 0),
+        pass_yds = int(data.get("pass_yds", 0) or 0),
+        pass_td  = int(data.get("pass_td", 0) or 0),
+        pass_int = int(data.get("pass_int", 0) or 0),
+        pass_long = int(data.get("pass_long", 0) or 0),
+        pass_rating = float(data.get("pass_rating", 0) or 0),
+        pass_sacked = int(data.get("pass_sacked", 0) or 0),
+
         rush_att=int(data.get("rush_att", 0) or 0),
         rush_yds=int(data.get("rush_yds", 0) or 0),
         rush_td=int(data.get("rush_td", 0) or 0),
