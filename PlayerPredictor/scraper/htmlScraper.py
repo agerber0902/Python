@@ -10,7 +10,7 @@ Web Scraper that uses requests to and the input url to get html and return it
 
 #   Define Imports
 import requests
-from utils import doesExist, isValidType
+from scraper.utils import doesExist, isValidType
 from bs4 import BeautifulSoup
 #-- Imports
 
