@@ -13,8 +13,8 @@ Get the 2025 Game Log Table and parse data
 #   Define Imports
 from scraper.utils import doesExist
 import datetime
-from scraper.classes.gameLog import GameLog
-from scraper.classes.game import Game
+from classes.gameLog import GameLog
+from classes.game import Game
 #-- Imports
 
 #   Use beautiful soup to get the the player game log
