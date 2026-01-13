@@ -11,7 +11,7 @@ GameLog - list of games
 
 from dataclasses import dataclass, field
 from .game import Game
-from utils import isValidType
+from scraper.utils import isValidType
 from typing import List, Dict
 
 MAX_PASSING_STAT_NAMES = ["pass_att", "pass_cmp", "pass_yds", "pass_td", "pass_int", "pass_long"]

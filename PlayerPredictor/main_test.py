@@ -9,8 +9,8 @@ Test main file for testing and sandbox purposes
 """
 
 # Parse the player url into soup
-from htmlScraper import getHtmlSoupFromUrl
-from playerScraper import getPlayerDataFromSoup
+from scraper.htmlScraper import getHtmlSoupFromUrl
+from scraper.playerScraper import getPlayerDataFromSoup
 
 player_url = input("Enter player url: ")
 #"https://www.pro-football-reference.com/players/J/JeanAs00.htm"
