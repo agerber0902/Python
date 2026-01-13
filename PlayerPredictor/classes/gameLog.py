@@ -163,7 +163,7 @@ class GameLog:
             )
 
 
-    def get_max_entry(self, max_list, stat_name):
+    def get_max_entry(self, max_list, stat_name: str):
         return next(
             (entry for entry in max_list if stat_name in entry),
             None
