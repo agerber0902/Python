@@ -26,15 +26,25 @@ def get_player_by_url(url : str) -> Player:
 
 def create_compare_table(players: list[Player]) -> str:
     #   Create Headers
-    table_headers = ["Stat\t\t"] + [player.PlayerInfo.name for player in players]
-    print(" | ".join(table_headers))
-    print("--------------------------------")
+    table_headers = ["Stat"] + [str(player.PlayerInfo.name) for player in players]
+
+    # Determine column width based on longest header
+    col_width = max(len(h) for h in table_headers)
+    
+    # Build header row
+    header_row = " | ".join(h.ljust(col_width) for h in table_headers)
+    
+    print(header_row)
+    print("-" * len(header_row))
+
     
     # Collect all stat names (keys) from all players to handle missing stats
+    
     all_stats = set()
     for player in players:
         all_stats.update(player.GameLog.passingTotals.keys())
     
+    #sorted_stats = all_stats.sorted()
     
     #   Create rows
     rows: list[dict[str, list[str]]] = []
@@ -44,10 +54,12 @@ def create_compare_table(players: list[Player]) -> str:
         #row = {stat: values}
         #rows.append(row)
         for player in players:
-            values.append(str(player.GameLog.passingTotals.get(stat, 0)) + "\t\t")
+            values.append(str(player.GameLog.passingTotals.get(stat, 0)))
             
         row = {stat: values}
-        print(f"{stat}\t | " + "| ".join(values))
+        display_row = " | ".join(h.ljust(col_width) for h in [stat, *values])
+        print(display_row)
+        #print(f"{stat}\t | " + "| ".join(values))
         rows.append(row)
         
     

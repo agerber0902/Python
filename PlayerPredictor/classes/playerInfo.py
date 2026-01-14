@@ -21,7 +21,7 @@ class PlayerInfo:
     #   Functions to determine position
     @property
     def isQB(self) -> bool:
-        return self.position.upper() == "QB"
+        return "QB" in self.position.upper()
     @property
     def isRB(self) -> bool:
         return self.position.upper() == "RB"
