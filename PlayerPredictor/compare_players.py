@@ -24,7 +24,57 @@ def get_player_by_url(url : str) -> Player:
         print(f"An error occured processing player 1 url: {player1_url}")
         return None
 
-def create_compare_table(players: list[Player]) -> str:
+def create_compare_tables(players: list[Player]):
+    if any(player.PlayerInfo.isQB for player in players):
+        create_passing_compare_table(players)
+    
+    #Display skill compare
+    print("\n")
+    create_skill_compare_table(players)
+
+def create_skill_compare_table(players: list[Player]) -> str:
+    #   Create Headers
+    table_headers = ["Stat"] + [str(player.PlayerInfo.name) for player in players]
+
+    # Determine column width based on longest header
+    col_width = max(len(h) for h in table_headers)
+    
+    # Build header row
+    header_row = " | ".join(h.ljust(col_width) for h in table_headers)
+    
+    print(header_row)
+    print("-" * len(header_row))
+
+    
+    # Collect all stat names (keys) from all players to handle missing stats
+    
+    all_stats = set()
+    for player in players:
+        all_stats.update(player.GameLog.rushingTotals.keys())
+        all_stats.update(player.GameLog.receivingTotals.keys())
+    
+    #sorted_stats = all_stats.sorted()
+    
+    #   Create rows
+    rows: list[dict[str, list[str]]] = []
+    for stat in all_stats:
+        
+        values = []
+        #row = {stat: values}
+        #rows.append(row)
+        for player in players:
+            if("rush" in stat):
+                values.append(str(player.GameLog.rushingTotals.get(stat, 0)))
+            else:
+                values.append(str(player.GameLog.receivingTotals.get(stat, 0)))
+            
+        row = {stat: values}
+        display_row = " | ".join(h.ljust(col_width) for h in [stat, *values])
+        print(display_row)
+        #print(f"{stat}\t | " + "| ".join(values))
+        rows.append(row)
+
+def create_passing_compare_table(players: list[Player]) -> str:
     #   Create Headers
     table_headers = ["Stat"] + [str(player.PlayerInfo.name) for player in players]
 
@@ -67,11 +117,13 @@ def create_compare_table(players: list[Player]) -> str:
 # https://www.pro-football-reference.com/players/A/AlleJo02.htm
 # https://www.pro-football-reference.com/players/B/BurrJo01.htm
 player1_url: str = "https://www.pro-football-reference.com/players/A/AlleJo02.htm" #input("Enter the first player's url: ")
-player2_url: str = "https://www.pro-football-reference.com/players/B/BurrJo01.htm" #input("Enter the second player's url: ")
+player2_url: str = "https://www.pro-football-reference.com/players/B/BoweBr01.htm" #input("Enter the second player's url: ")
+player3_url: str = "https://www.pro-football-reference.com/players/B/BurrJo01.htm"
 
 #Call the scraper to set the player data
 player1 = get_player_by_url(player1_url)
 player2 = get_player_by_url(player2_url)
+player3 = get_player_by_url(player3_url)
 
 #   Compare by Totals
-create_compare_table([player1, player2])
+create_compare_tables([player1, player2, player3])
