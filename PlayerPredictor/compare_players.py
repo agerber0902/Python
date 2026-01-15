@@ -25,48 +25,74 @@ def get_player_by_url(url : str) -> Player:
         return None
 
 def create_compare_tables(players: list[Player]):
-    if any(player.PlayerInfo.isQB for player in players):
-        create_passing_compare_table(players)
     
-    #Display skill compare
+    #Display passing totals compare table
+    if any(player.PlayerInfo.isQB for player in players):
+        create_passing_compare_table(players, False)
+    
+    #Display skill totals compare
     print("\n")
-    create_skill_compare_table(players)
+    create_skill_compare_table(players, False)
+    
+    # Display Maxes
+    print ("\n\n")
+    if any(player.PlayerInfo.isQB for player in players):
+        create_passing_compare_table(players, True)
 
-def create_skill_compare_table(players: list[Player]) -> str:
+    print("\n")
+    create_skill_compare_table(players, True)
+
+def create_skill_compare_table(players: list[Player], isMax: bool) -> str:
     #   Create Headers
-    table_headers = ["Stat"] + [str(player.PlayerInfo.name) for player in players]
+    stat_header = "Max Stat" if isMax else "Stat"
+    table_headers = [stat_header] + [str(player.PlayerInfo.name) for player in players]
 
     # Determine column width based on longest header
-    col_width = max(len(h) for h in table_headers)
+    header_col_width = max(len(h) for h in table_headers)
+    
+    # Collect all stat names (keys) from all players to handle missing stats
+    
+    all_stats = set()
+    for player in players:
+        if isMax:
+            for d in player.GameLog.rushingMaxes:
+                all_stats.update(d.keys())
+            for d in player.GameLog.receivingMaxes:
+                all_stats.update(d.keys())
+        else:
+            all_stats.update(player.GameLog.rushingTotals.keys())
+            all_stats.update(player.GameLog.receivingTotals.keys())
+    
+    stat_col_width = max(len(s) for s in all_stats)
+    col_width = max(header_col_width, stat_col_width)
     
     # Build header row
     header_row = " | ".join(h.ljust(col_width) for h in table_headers)
     
     print(header_row)
     print("-" * len(header_row))
-
-    
-    # Collect all stat names (keys) from all players to handle missing stats
-    
-    all_stats = set()
-    for player in players:
-        all_stats.update(player.GameLog.rushingTotals.keys())
-        all_stats.update(player.GameLog.receivingTotals.keys())
-    
-    #sorted_stats = all_stats.sorted()
     
     #   Create rows
     rows: list[dict[str, list[str]]] = []
     for stat in all_stats:
+        
+        if stat == "game_dates":
+            continue
         
         values = []
         #row = {stat: values}
         #rows.append(row)
         for player in players:
             if("rush" in stat):
-                values.append(str(player.GameLog.rushingTotals.get(stat, 0)))
+                if isMax:
+                    values.append(str(player.GameLog.get_max_entry(player.GameLog.rushingMaxes, stat)[stat]))
+                else:
+                    values.append(str(player.GameLog.rushingTotals.get(stat, 0)))
             else:
-                values.append(str(player.GameLog.receivingTotals.get(stat, 0)))
+                if isMax:
+                    values.append(str(player.GameLog.get_max_entry(player.GameLog.receivingMaxes, stat)[stat]))
+                else:
+                    values.append(str(player.GameLog.receivingTotals.get(stat, 0)))
             
         row = {stat: values}
         display_row = " | ".join(h.ljust(col_width) for h in [stat, *values])
@@ -74,37 +100,48 @@ def create_skill_compare_table(players: list[Player]) -> str:
         #print(f"{stat}\t | " + "| ".join(values))
         rows.append(row)
 
-def create_passing_compare_table(players: list[Player]) -> str:
+def create_passing_compare_table(players: list[Player], isMax: bool) -> str:
     #   Create Headers
-    table_headers = ["Stat"] + [str(player.PlayerInfo.name) for player in players]
+    stat_header = "Max Stat" if isMax else "Stat"
+    table_headers = [stat_header] + [str(player.PlayerInfo.name) for player in players]
 
     # Determine column width based on longest header
-    col_width = max(len(h) for h in table_headers)
+    header_col_width = max(len(h) for h in table_headers)
     
+    # Collect all stat names (keys) from all players to handle missing stats
+    
+    all_stats = set()
+    for player in players:
+        if isMax:
+            for d in player.GameLog.passingMaxes:
+                all_stats.update(d.keys())
+        else:
+            all_stats.update(player.GameLog.passingTotals.keys())
+    
+    stat_col_width = max(len(s) for s in all_stats)
+    col_width = max(header_col_width, stat_col_width)
+
     # Build header row
     header_row = " | ".join(h.ljust(col_width) for h in table_headers)
     
     print(header_row)
     print("-" * len(header_row))
 
-    
-    # Collect all stat names (keys) from all players to handle missing stats
-    
-    all_stats = set()
-    for player in players:
-        all_stats.update(player.GameLog.passingTotals.keys())
-    
-    #sorted_stats = all_stats.sorted()
-    
+
     #   Create rows
     rows: list[dict[str, list[str]]] = []
     for stat in all_stats:
+        if stat == "game_dates":
+            continue
         
         values = []
         #row = {stat: values}
         #rows.append(row)
         for player in players:
-            values.append(str(player.GameLog.passingTotals.get(stat, 0)))
+            if isMax:
+                values.append(str(player.GameLog.get_max_entry(player.GameLog.passingMaxes, stat)[stat]))
+            else:
+                values.append(str(player.GameLog.passingTotals.get(stat, 0)))
             
         row = {stat: values}
         display_row = " | ".join(h.ljust(col_width) for h in [stat, *values])
@@ -112,8 +149,6 @@ def create_passing_compare_table(players: list[Player]) -> str:
         #print(f"{stat}\t | " + "| ".join(values))
         rows.append(row)
         
-    
-    return ""
 # https://www.pro-football-reference.com/players/A/AlleJo02.htm
 # https://www.pro-football-reference.com/players/B/BurrJo01.htm
 player1_url: str = "https://www.pro-football-reference.com/players/A/AlleJo02.htm" #input("Enter the first player's url: ")
