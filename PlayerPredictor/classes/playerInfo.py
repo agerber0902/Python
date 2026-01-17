@@ -18,6 +18,16 @@ class PlayerInfo:
     height: str
     weight: str
 
+    def to_dataframe_row(self) -> dict:
+        return {
+            "name": self.name,
+            "position": self.position,
+            "team": self.team,
+            "height": self.height,
+            "weight": self.weight
+            }
+        
+
     #   Functions to determine position
     @property
     def isQB(self) -> bool:
