@@ -48,7 +48,13 @@ class GameLog:
         self.set_pass_maxes()
         self.set_rush_maxes()
         self.set_rec_maxes()          
-        
+    
+    # Convert data to dict for data frame
+    def to_dataframe_row(self) -> dict:
+        return {
+            "passing_totals"
+            }    
+    
     #   Compute maxes for all rush stats
     def set_pass_maxes(self):
         for stat_name in MAX_PASSING_STAT_NAMES:
@@ -168,3 +174,12 @@ class GameLog:
             (entry for entry in max_list if stat_name in entry),
             None
         )
+
+    def flatten_maxes(self, maxes: list[dict]) -> dict:
+        return {
+            stat: data
+            for d in maxes
+            for stat, data in d.items()
+            if stat != "game_dates"
+        }
+

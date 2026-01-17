@@ -17,6 +17,43 @@ class Player(PlayerInfo):
         self.PlayerInfo = player_info
         self.GameLog = game_log
 
+    def game_log_to_dataframe(self, logType: str) -> dict:
+        if(logType == "" or logType == " "):
+            return None
+        
+        if(logType.upper() == "PASSING_TOTALS"):
+            return {
+                "player_name" : self.PlayerInfo.name,
+                **self.GameLog.passingTotals
+                }
+        elif(logType.upper() == "RUSHING_TOTALS"):
+            return {
+                "player_name" : self.PlayerInfo.name,
+                **self.GameLog.rushingTotals
+                }
+        elif(logType.upper() == "RECEIVING_TOTALS"):
+            return {
+                "player_name" : self.PlayerInfo.name,
+                **self.GameLog.receivingTotals
+                }
+        elif(logType.upper() == "PASSING_MAXES"):
+            return {
+                "player_name" : self.PlayerInfo.name,
+                **self.GameLog.flatten_maxes(self.GameLog.passingMaxes)
+                }
+        elif(logType.upper() == "RUSHING_MAXES"):
+            return {
+                "player_name" : self.PlayerInfo.name,
+                **self.GameLog.flatten_maxes(self.GameLog.rushingMaxes)
+                }
+        elif(logType.upper() == "RECEIVING_MAXES"):
+            return {
+                "player_name" : self.PlayerInfo.name,
+                **self.GameLog.flatten_maxes(self.GameLog.receivingMaxes)
+                }
+        else:
+            return None
+
     def display(self):        
         return f"""
 {self.PlayerInfo.name} | {self.PlayerInfo.position}, {self.PlayerInfo.team}
