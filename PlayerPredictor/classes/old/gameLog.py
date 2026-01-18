@@ -13,6 +13,7 @@ from dataclasses import dataclass, field
 from .game import Game
 from scraper.utils import isValidType
 from typing import List, Dict
+from pandas import DataFrame
 
 MAX_PASSING_STAT_NAMES = ["pass_att", "pass_cmp", "pass_yds", "pass_td", "pass_int", "pass_long"]
 MAX_RUSHING_STAT_NAMES = ["rush_att", "rush_yds", "rush_td", "rush_long"]
@@ -48,6 +49,12 @@ class GameLog:
         self.set_pass_maxes()
         self.set_rush_maxes()
         self.set_rec_maxes()          
+    
+    def passing_frame(self) -> DataFrame:
+        frame = DataFrame(self.games)
+        frame = frame[["date", "pass_cmp", "pass_att", "pass_yds", "pass_td", "pass_int", "pass_long", "pass_rating", "pass_sacked"]]
+        frame = frame.rename(columns = {"pass_cmp": "cmp", "pass_att": "att", "pass_yds": "yds"}, inplace=True)
+        print(frame)
     
     # Convert data to dict for data frame
     def to_dataframe_row(self) -> dict:

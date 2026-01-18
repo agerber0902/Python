@@ -54,13 +54,48 @@ data_frame = pd.DataFrame([
     player3.PlayerInfo.to_dataframe_row(),
 ])
 
-print(pd.DataFrame([player1.game_log_to_dataframe("passing_totals")]))
-print(pd.DataFrame([player1.game_log_to_dataframe("rushing_totals")]))
-print(pd.DataFrame([player1.game_log_to_dataframe("receiving_totals")]))
+passing_totals_data_frame = pd.DataFrame([
+    player1.game_log_to_dataframe("passing_totals"),
+    player2.game_log_to_dataframe("passing_totals"),
+    player3.game_log_to_dataframe("passing_totals"),
+    ])
 
-print(pd.DataFrame([player1.game_log_to_dataframe("passing_maxes")]))
-print(pd.DataFrame([player1.game_log_to_dataframe("rushing_maxes")]))
-print(pd.DataFrame([player1.game_log_to_dataframe("receiving_maxes")]))
+rushing_totals_data_frame = pd.DataFrame([
+    player1.game_log_to_dataframe("rushing_totals"),
+    player2.game_log_to_dataframe("rushing_totals"),
+    player3.game_log_to_dataframe("rushing_totals"),
+    ])
+
+receiving_totals_data_frame = pd.DataFrame([
+    player1.game_log_to_dataframe("receiving_totals"),
+    player2.game_log_to_dataframe("receiving_totals"),
+    player3.game_log_to_dataframe("receiving_totals"),
+    ])
+
+passing_maxes_data_frame = pd.DataFrame([
+    player1.game_log_to_dataframe("passing_maxes"),
+    player2.game_log_to_dataframe("passing_maxes"),
+    player3.game_log_to_dataframe("passing_maxes"),
+    ])
+
+rushing_maxes_data_frame = pd.DataFrame([
+    player1.game_log_to_dataframe("rushing_maxes"),
+    player2.game_log_to_dataframe("rushing_maxes"),
+    player3.game_log_to_dataframe("rushing_maxes"),
+    ])
+
+receiving_maxes_data_frame = pd.DataFrame([
+    player1.game_log_to_dataframe("receiving_maxes"),
+    player2.game_log_to_dataframe("receiving_maxes"),
+    player3.game_log_to_dataframe("receiving_maxes"),
+    ])
+
+print(f"{passing_totals_data_frame}\n")
+print(f"{rushing_totals_data_frame}\n")
+print(f"{receiving_totals_data_frame}\n")
+print(f"{passing_maxes_data_frame}\n")
+print(f"{rushing_maxes_data_frame}\n")
+print(f"{receiving_maxes_data_frame}")
 
 #compare_players([player1, player2, player3])
 

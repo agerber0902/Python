@@ -1,53 +1,47 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Tue Jan  6 11:12:34 2026
+Created on Sun Jan 18 11:45:32 2026
 
-Data Class for PlayerInfo
+Player Info Data Class containing the basic player info
+Name, Team, Position, height, weight, college
 
 @author: andrewgerber
 """
 
-
+#Define imports
 from dataclasses import dataclass
+
+#Define Consts
+RB_NAMES = ["RB", "HB", "FB"]
+
 @dataclass
 class PlayerInfo:
-    name: str
-    position: str
+    # Basic player info
+    name: str 
     team: str
+    position: str
     height: str
     weight: str
-
-    def to_dataframe_row(self) -> dict:
-        return {
-            "name": self.name,
-            "position": self.position,
-            "team": self.team,
-            "height": self.height,
-            "weight": self.weight
-            }
-        
-
-    #   Functions to determine position
+    
+    # Bonus player info
+    college: str
+    draftedTeam: str
+    
+    # Define Properties
     @property
-    def isQB(self) -> bool:
-        return "QB" in self.position.upper()
+    def isQb(self) -> bool:
+        return self.position.upper() == "QB"
     @property
-    def isRB(self) -> bool:
-        return self.position.upper() == "RB"
+    def isRb(self) -> bool:
+        return self.position.upper() in RB_NAMES
     @property
-    def isWR(self) -> bool:
+    def isWr(self) -> bool:
         return self.position.upper() == "WR"
     @property
     def isTE(self) -> bool:
         return self.position.upper() == "TE"
     @property
     def isSkill(self) -> bool:
-        return self.isRB(self) or self.isWR(self) or self.isTE()
-    @property
-    def isKicker(self) -> bool:
-        return self.position.upper() == "K"
-    @property
-    def isPunter(self) -> bool:
-        return self.position.upper() == "P"
-    # TODO: how to handle DEF?
+        return self.isRb or self.isWr or self.isTE
+    # End of Properties
