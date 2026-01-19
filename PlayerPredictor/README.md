@@ -9,3 +9,10 @@ Get the active player's 2025 Game log Table from the url input.
 Display the player's best games (max values per categories)
 
 Project that leverages scraper and requests to manipulate player game log data.
+
+In order to install packages, 
+
+import sys
+!{sys.executable} -m ensurepip --upgrade
+!{sys.executable} -m pip install --upgrade pip
+!{sys.executable} -m pip install firebase-admin

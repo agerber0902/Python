@@ -24,6 +24,8 @@ class PlayerInfo:
     height: str
     weight: str
     
+    url: str
+    
     # Bonus player info
     college: str
     draftedTeam: str
