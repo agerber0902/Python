@@ -14,12 +14,7 @@ from .playerInfo import PlayerInfo
 from .game import Game
 
 @dataclass
-class Player(PlayerInfo):
+class Player:
     
+    playerInfo: PlayerInfo
     games: list[Game]
-    
-    #Initialize the class
-    def __init__(self, player_info = None):
-        #Initialize Player Info
-        self.PlayerInfo = player_info
-    
