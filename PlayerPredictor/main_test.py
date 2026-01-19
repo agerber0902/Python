@@ -12,12 +12,12 @@ Test main file for testing and sandbox purposes
 from scraper.htmlScraper import getHtmlSoupFromUrl
 from scraper.playerScraper import getPlayerDataFromSoup
 
-player_url = input("Enter player url: ")
-#"https://www.pro-football-reference.com/players/J/JeanAs00.htm"
+#player_url = input("Enter player url: ")
+player_url = "https://www.pro-football-reference.com/players/J/JeanAs00.htm"
 html_soup = getHtmlSoupFromUrl(player_url)
 
 #   Get the player info
 player = getPlayerDataFromSoup(html_soup)
 
 #   Display the info
-print(player.display())
+#print(player.display())
