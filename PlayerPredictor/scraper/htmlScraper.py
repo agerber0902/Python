@@ -50,7 +50,7 @@ def isValidUrl(url):
 def getHtmlFromUrl(url):
     response = requests.get(url)
     if not response:
-        raise Exception("Response was not found.")
+        raise Exception(f"{response.status_code} Response was not found.")
         return
     
     return response.text

@@ -20,8 +20,12 @@ firebase = PlayerFirebase("/Users/andrewgerber/Development/Python/PlayerPredicto
 
 
 # Get player data from url
-player_url = "https://www.pro-football-reference.com/players/J/JeanAs00.htm"
+#player_url = "https://www.pro-football-reference.com/players/J/JeanAs00.htm"
 #player_url = "https://www.pro-football-reference.com/players/A/AlleJo02.htm"
+
+alpha = 'A'
+player_page_base_url = f"https://www.pro-football-reference.com/players/{alpha}/"
+
 html_soup = htmlScraper.getHtmlSoupFromUrl(player_url)
 
 # Create Player
