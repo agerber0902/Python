@@ -10,7 +10,7 @@ Created on Sun Jan 18 13:36:24 2026
 import re
 from classes.playerInfo import PlayerInfo
 
-def info_scraper(html_soup):
+def info_scraper(url: str, html_soup):
     # Find the meta div
     meta = html_soup.find("div", id="meta")
         
@@ -90,5 +90,5 @@ def info_scraper(html_soup):
                 college = colleges[-1] if colleges else ""
             
             
-    player_info = PlayerInfo(name = player_name, team = team, position = position, height = height, weight = weight, college = college, draftedTeam = drafted_team)
+    player_info = PlayerInfo(url = url, name = player_name, team = team, position = position, height = height, weight = weight, college = college, draftedTeam = drafted_team)
     return player_info
