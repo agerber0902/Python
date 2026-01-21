@@ -9,28 +9,48 @@ Player Predictor main operating file
 """
 
 #Define Imports
-from classes.player import Player
-from scraper import htmlScraper
-from scraper.infoScraper import info_scraper
-from scraper.gameScrapper import getGameLogFromSoup
+import helpers.mainHelper as helper
 from data.playerFirebase import PlayerFirebase
+
+
+print("Beginning application.. initializing database.")
 
 #Initialize Firebase
 firebase = PlayerFirebase("/Users/andrewgerber/Development/Python/PlayerPredictor/data/player-data-cf86f-firebase-adminsdk-fbsvc-6bd1a64e27.json")
+print("Database initialized.")
 
+# Intro messaging
+print("Welcome to player data with python!")
 
-# Get player data from url
-#player_url = "https://www.pro-football-reference.com/players/J/JeanAs00.htm"
-#player_url = "https://www.pro-football-reference.com/players/A/AlleJo02.htm"
+#Print Menu
+print(""""
+  1. Get Player from database
+  2. Get Player breakdowns
+  3. Add Player to database
+  4. Player Trivia
+      """)
+# Get the user selection. Stay until valid selection
+valid_options: list[int] = [1,2,3,4]
+error_message: str = f"Invalid input, please input integer value within {valid_options[0]}-{valid_options[-1]}"
+selection = None
+while not selection:    
+    try:
+        selection: int = int(input("What would you like to do? "))
+        if selection not in valid_options:
+            print(error_message)
+            selection = None
+            
+    except:
+        print(error_message)
+        selection = None
 
-alpha = 'A'
-player_page_base_url = f"https://www.pro-football-reference.com/players/{alpha}/"
-
-html_soup = htmlScraper.getHtmlSoupFromUrl(player_url)
-
-# Create Player
-url_to_save = player_url.split("/")[-1].split(".htm")[0]
-info = info_scraper(url_to_save, html_soup)
-firebase.add_playerInfo(info)
-#games = getGameLogFromSoup(html_soup)
-#player = Player(playerInfo = info, games = games)
+# Handle the user input
+print("\n\n")
+if(selection == 1):
+    helper.get_player()
+elif(selection == 2):
+    helper.add_player()
+elif(selection == 3):
+    helper.player_breakdowns()
+elif(selection == 4):
+    helper.player_trivia()
