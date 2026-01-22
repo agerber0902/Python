@@ -25,9 +25,10 @@ print("Welcome to player data with python!")
 #Print Menu
 print(""""
   1. Get Player from database
-  2. Get Player breakdowns
-  3. Add Player to database
+  2. Add Player to database
+  3. Get Player breakdowns
   4. Player Trivia
+  0. Quit
       """)
 # Get the user selection. Stay until valid selection
 valid_options: list[int] = [1,2,3,4]
@@ -36,6 +37,10 @@ selection = None
 while not selection:    
     try:
         selection: int = int(input("What would you like to do? "))
+        
+        if selection == 0:
+            break
+        
         if selection not in valid_options:
             print(error_message)
             selection = None
@@ -47,10 +52,10 @@ while not selection:
 # Handle the user input
 print("\n\n")
 if(selection == 1):
-    helper.get_player()
+    helper.get_player(firebase)
 elif(selection == 2):
-    helper.add_player()
+    helper.add_player(firebase)
 elif(selection == 3):
-    helper.player_breakdowns()
+    helper.player_breakdowns(firebase)
 elif(selection == 4):
-    helper.player_trivia()
+    helper.player_trivia(firebase)
