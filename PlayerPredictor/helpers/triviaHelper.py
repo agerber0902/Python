@@ -22,12 +22,13 @@ def generate_player_team_question(player: PlayerInfo, players: list[PlayerInfo])
     
     # pick 3 random players excluding the current one
     wrong_answers = random.sample(
-        [p.team for p in players if p.team != player.team],
+        [p.team if p.team != None else "Free Agent" for p in players if p.team != player.team],
         k=min(3, len(players) - 1)
     )
-    answers = wrong_answers + [player.team]
+    correct = player.team if player.team != None else "Free Agent"
+    answers = wrong_answers + [correct]
     random.shuffle(answers)
-    question = Question(question = player_team_question, answers = answers, correct=player.team)
+    question = Question(question = player_team_question, answers = answers, correct=correct)
     return question
 
 def generate_player_position_question(player: PlayerInfo, players: list[PlayerInfo]) -> Question:
@@ -57,16 +58,17 @@ def generate_player_drafted_team_question(player: PlayerInfo, players: list[Play
     
     # pick 3 random players excluding the current one
     wrong_answers = random.sample(
-        [p.draftedTeam for p in players if p.draftedTeam != player.draftedTeam],
+        [p.draftedTeam if p.draftedTeam != None else "Undrafted" for p in players if p.draftedTeam != player.draftedTeam],
         k=min(3, len(players) - 1)
     )
 
-    answers = wrong_answers + [player.draftedTeam]
+    correct = player.draftedTeam if player.draftedTeam != None else "Undrafted"
+    answers = wrong_answers + [correct]
     random.shuffle(answers)
-    return Question(question = question, answers = answers, correct=player.draftedTeam)
+    return Question(question = question, answers = answers, correct=correct)
 
 def generate_drafted_team_question(player: PlayerInfo, players: list[PlayerInfo]) -> Question:
-    question = f"What player was drafted by {player.draftedTeam}"
+    question = f"What player was drafted by {player.draftedTeam}" if player.draftedTeam != None else f"What player went undrafted?"
     
     # pick 3 random players excluding the current one
     wrong_answers = random.sample(
@@ -79,7 +81,7 @@ def generate_drafted_team_question(player: PlayerInfo, players: list[PlayerInfo]
     return Question(question = question, answers = answers, correct=player.name)
 
 def generate_team_question(player: PlayerInfo, players: list[PlayerInfo]) -> Question:
-    team_question = f"What player plays for {player.team}?"
+    team_question = f"What player plays for {player.team}?" if player.team != None else f"What player is a free agent?"
     
     # pick 3 random players excluding the current one
     wrong_answers = random.sample(
