@@ -9,8 +9,14 @@ Created on Sun Jan 18 13:36:24 2026
 #Define Imports
 import re
 from classes.playerInfo import PlayerInfo
+from .htmlScraper import getHtmlSoupFromUrl
+from bs4 import BeautifulSoup
 
-def info_scraper(url: str, html_soup):
+def info_scraper(url: str, html_soup: BeautifulSoup | None) -> PlayerInfo:
+    
+    if html_soup is None:
+        html_soup = getHtmlSoupFromUrl(url)
+    
     # Find the meta div
     meta = html_soup.find("div", id="meta")
         
@@ -89,6 +95,5 @@ def info_scraper(url: str, html_soup):
             
                 college = colleges[-1] if colleges else ""
             
-            
-    player_info = PlayerInfo(url = url, name = player_name, team = team, position = position, height = height, weight = weight, college = college, draftedTeam = drafted_team)
+    player_info = PlayerInfo(url = url.split("/")[-1].split(".htm")[0], name = player_name, team = team, position = position, height = height, weight = weight, college = college, draftedTeam = drafted_team)
     return player_info
