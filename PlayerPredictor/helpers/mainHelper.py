@@ -12,6 +12,7 @@ Main Helper that handles all the user options
 from classes.playerInfo import PlayerInfo
 from data.playerFirebase import PlayerFirebase
 from scraper.infoScraper import info_scraper
+from .triviaHelper import start_trivia
 
 # Validate full name input
 def is_text_with_spaces(value: str) -> bool:
@@ -75,7 +76,7 @@ def player_breakdowns(firebase: PlayerFirebase):
 
 # -- Option 4: Player Trivia
 def player_trivia(firebase: PlayerFirebase):
-    print("Feature coming soon.")
+    start_trivia(firebase)
     #TODO: create questions
     #TODO: display questions
     #TODO: create answers

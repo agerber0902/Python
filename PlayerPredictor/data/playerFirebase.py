@@ -25,7 +25,12 @@ class PlayerFirebase(Firebase):
         #Initialize own fields
         self.collection_name = "players"
         self.collection = self.db.collection(self.collection_name)
-        
+      
+    def get_players(self) -> list[PlayerInfo]:
+        players = self.db.collection(self.collection_name).get()
+
+        return [PlayerInfo(**player.to_dict()) for player in players]
+      
     # Get Player by player name
     def get_player_info_by_name(self, name: str) -> PlayerInfo:
         player = next(
@@ -56,6 +61,7 @@ class PlayerFirebase(Firebase):
             
             if player:
                 #update
+                print("")
                 #self.update_playerInfo(player[1].id, playerInfo)
             else:
                 self.collection.add(playerInfo.__dict__)
