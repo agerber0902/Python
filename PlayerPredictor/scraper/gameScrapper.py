@@ -24,7 +24,7 @@ def getGameLogFromSoup(html_soup):
         print("No HTML was returned by the response.")
         return game_log
     
-    player_name = html_soup.select_one(".breadcrumbs strong").get_text(strip=True)
+    player_name = ""#html_soup.select_one(".breadcrumbs strong").get_text(strip=True)
     
     print(f"Html found. Parsing for Game Log Table for {player_name}..")
     
