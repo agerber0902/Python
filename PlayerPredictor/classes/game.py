@@ -21,9 +21,18 @@ GAME_NAMING_CONVENTIONS = {
     "team_name_abbr" : "team",
     "game_location": "location",
     "opp_name_abbr": "opp",
-    "game_result": "result"
+    "game_result": "result",
     }
-
+PASSING_NAMING_CONVENTIONS = {
+    "pass_cmp": "cmp",
+    "pass_att": "att",
+    "pass_yds": "yds",
+    "pass_td": "td",
+    "pass_int": "int",
+    "pass_long": "long",
+    "pass_rating": "rate",
+    "pass_sacked": "sacked"
+    }
  #   Convert dict to Game object
 def game_from_dict(data: dict):
     
@@ -96,6 +105,13 @@ class Game(PassingGameStat, RushingGameStat, ReceivingGameStat, TotalGameStat):
     rushing_stats: Optional[RushingGameStat] = None
     receiving_stats: Optional[ReceivingGameStat] = None
     total_stats: Optional[TotalGameStat] = None
+    
+    @property
+    def opp_str(self):
+        if self.game_location.upper() == "AWAY":
+            return f"@ {self.opp_name_abbr}"
+        else:
+            return f"vs {self.opp_name_abbr}"
     
     @property
     def game_string(self):

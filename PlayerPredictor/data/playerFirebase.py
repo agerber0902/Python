@@ -33,14 +33,9 @@ class PlayerFirebase(Firebase):
       
     # Get Player by player name
     def get_player_info_by_name(self, name: str) -> PlayerInfo:
-
-        player = next(
-            self.db.collection(self.collection_name)
-            .where(filter=FieldFilter("name", "==", name.title()))
-            .limit(1)
-            .stream(),
-            None
-        )
+        print("here")
+        print(self.collection)
+        player = self.collection.get() #.where(filter=FieldFilter("name", "==", name.title())).limit(1).get()
         print(player)
         
         if player is None:
