@@ -91,6 +91,10 @@ def add_player(firebase: PlayerFirebase) -> PlayerInfo:
 def player_breakdowns(firebase: PlayerFirebase):
     #Get the player
     #player = get_player(firebase, True)
+    #https://www.pro-football-reference.com/players/H/HurtJa00.htm
+    #https://www.pro-football-reference.com/players/B/BoweBr01.htm
+    #https://www.pro-football-reference.com/players/S/SwifDA00.htm
+    #https://www.pro-football-reference.com/players/N/NacuPu00.htm
     
     getting_players = True
     urls: list[str] = []

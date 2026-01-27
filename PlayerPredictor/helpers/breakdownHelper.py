@@ -14,12 +14,105 @@ from classes.game import Game, GAME_NAMING_CONVENTIONS, PASSING_NAMING_CONVENTIO
 from pandas import DataFrame
 import numpy as np
 
-PASSING_TOTAL_COLUMNS = ["cmp", "att", "td", "int", "long"]
+PASSING_TOTAL_COLUMNS = ["cmp", "att", "td", "int"]
 PASSING_MAX_COLUMNS = ["cmp", "att", "td", "int", "long", "rate"]
 
+RUSHING_TOTAL_COLUMNS = ["rush_att", "rush_yds", "rush_td"]
+RUSHING_MAX_COLUMNS = ["rush_att", "rush_td", "rush_long"]
+
+RECEIVING_TOTAL_COLUMNS = ["rec", "targets", "rec_yds", "rec_td"]
+RECEIVING_MAX_COLUMNS = ["rec", "targets", "rec_yds", "rec_td", "rec_long"]
 
 def get_player_totals(players: list[Player]):
-    return get_passing_totals(players)
+    passing_totals, passing_maxes = get_passing_totals(players)
+    rushing_totals, rushing_maxes = get_rushing_totals(players)
+    receiving_totals, receiving_maxes = get_receiving_totals(players)
+    return passing_totals, passing_maxes, rushing_totals, rushing_maxes, receiving_totals, receiving_maxes
+    
+
+def get_receiving_totals(players: list[Player]):
+    totals_rows = []
+    maxes_rows = []
+
+    for player in players:
+        rows = []
+
+        for game in player.games:
+            if not game.passing_stats:
+                continue
+            rows.append(vars(game.receiving_stats))
+
+        # skip players with no passing stats
+        if not rows:
+            continue
+
+        df = DataFrame(rows)
+
+        totals = df[RECEIVING_TOTAL_COLUMNS].sum()
+        maxes = df[RECEIVING_MAX_COLUMNS].max()
+
+        # label the row
+        totals["player"] = player.playerInfo.name
+        maxes["player"] = player.playerInfo.name
+
+        totals_rows.append(totals)
+        maxes_rows.append(maxes)
+
+    totals_df = (
+        DataFrame(totals_rows)
+        .set_index("player")
+        .sort_index()
+    )
+
+    maxes_df = (
+        DataFrame(maxes_rows)
+        .set_index("player")
+        .sort_index()
+    )
+
+    return totals_df, maxes_df
+
+def get_rushing_totals(players: list[Player]):
+    totals_rows = []
+    maxes_rows = []
+
+    for player in players:
+        rows = []
+
+        for game in player.games:
+            if not game.passing_stats:
+                continue
+            rows.append(vars(game.rushing_stats))
+
+        # skip players with no passing stats
+        if not rows:
+            continue
+
+        df = DataFrame(rows)
+
+        totals = df[RUSHING_TOTAL_COLUMNS].sum()
+        maxes = df[RUSHING_MAX_COLUMNS].max()
+
+        # label the row
+        totals["player"] = player.playerInfo.name
+        maxes["player"] = player.playerInfo.name
+
+        totals_rows.append(totals)
+        maxes_rows.append(maxes)
+
+    totals_df = (
+        DataFrame(totals_rows)
+        .set_index("player")
+        .sort_index()
+    )
+
+    maxes_df = (
+        DataFrame(maxes_rows)
+        .set_index("player")
+        .sort_index()
+    )
+
+    return totals_df, maxes_df
 
 def get_passing_totals(players: list[Player]):
     totals_rows = []
@@ -69,7 +162,7 @@ def get_passing_totals(players: list[Player]):
 
 
 
-def get_player_games(games):#player: Player) -> DataFrame:
+def get_player_games(games, is_passing: bool):#player: Player) -> DataFrame:
     rows = []
 
     for game in games:
@@ -84,7 +177,10 @@ def get_player_games(games):#player: Player) -> DataFrame:
         }
 
         # unpack passing stats
-        row.update(vars(game.passing_stats))
+        if is_passing:
+            row.update(vars(game.passing_stats))
+        else:
+            row.update(vars(game.total_stats))
 
         rows.append(row)
 
@@ -99,11 +195,23 @@ def get_player_games(games):#player: Player) -> DataFrame:
 def display_player_totals(players: list[Player]):
     #for player in players:
         #Get the player totals table
-    player_totals, maxes = get_player_totals(players)
+    passing_totals, passing_maxes, rushing_totals, rushing_maxes, receiving_totals, receiving_maxes = get_player_totals(players)
     
         #Display the table
-    print(player_totals)
+    print("PASSING:")
+    print(passing_totals)
     print("\n-------------------------\n")
-    print(maxes)
+    print(passing_maxes)
+    
+    print("\nRUSHING")
+    print(rushing_totals)
+    print("\n-------------------------\n")
+    print(rushing_maxes)
+    
+    print("\nRECEIVING")
+    print(receiving_totals)
+    print("\n-------------------------\n")
+    print(receiving_maxes)
+    
     
     return
