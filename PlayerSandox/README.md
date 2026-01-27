@@ -1,16 +1,16 @@
-# Player Predictor
+Player Sandbox
+Leverages BeautifulSoup and requests libraries to scrape sports reference player pages by input url. This data is strictly use as mock data for testing.
 
-Leverages BeautifulSoup and requests libraries to scrape sports reference player pages by input url. User will input a player url, and the application will call that url via requests, and parse the web page using BeautifulSoup Application displays various output data regarding player data and trends.
+User is prompted with a menu: 1. Get Player from database 2. Add Player to database 3. Get Player breakdowns 4. Player Trivia 0. Quit
 
-Application was created in Spyder 6
+Option 1-2
+A small amount of players exist in a firestore database for proof of concept, and the user can add get or add a player using options 1 or 2.
 
-## Player 2025 Game Log
-Get the active player's 2025 Game log Table from the url input.
-Display the player's best games (max values per categories)
+Option 3
+The user can enter as many player urls as they like, and the application will return a DataFrames table for stat totals and stat maxes
 
-Project that leverages scraper and requests to manipulate player game log data.
-
-In order to install packages, 
+Option 4
+Player Trivia uses the Player Info from the database and generates 8 different types of questions. User answers the questions until answering incorrectly.
 
 import sys
 !{sys.executable} -m ensurepip --upgrade
