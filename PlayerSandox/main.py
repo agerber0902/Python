@@ -16,7 +16,7 @@ from data.playerFirebase import PlayerFirebase
 print("Beginning application.. initializing database.")
 
 #Initialize Firebase
-firebase = PlayerFirebase("/Users/andrewgerber/Development/Python/PlayerPredictor/data/player-data-cf86f-firebase-adminsdk-fbsvc-6bd1a64e27.json")
+firebase = PlayerFirebase("/Users/andrewgerber/Development/Python/PlayerSandox/data/player-data-cf86f-firebase-adminsdk-fbsvc-6bd1a64e27.json")
 print("Database initialized.")
 
 # Intro messaging
